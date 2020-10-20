@@ -201,6 +201,24 @@ module.exports = function (content) {
     this.addDependency(generatorOptions.cssFontsUrl);
   }
 
+  const isCSSLoader = l => /(\/|\\|@)css-loader/.test(l.path);
+  const cssLoaderIndex = this.loaders.findIndex(isCSSLoader);
+
+  if (cssLoaderIndex > -1) {
+    const cssLoaderOptions = this.loaders[cssLoaderIndex].options || {};
+    const cssLoaderUrlOption = cssLoaderOptions.url;
+
+    cssLoaderOptions.url = (url, resourcePath) => {
+      if (resourcePath === this.resourcePath) {
+        return false;
+      }
+
+      return cssLoaderUrlOption;
+    };
+
+    this.loaders[cssLoaderIndex].options = cssLoaderOptions;
+  }
+
   webfontsGenerator(generatorOptions, (err, res) => {
     if (err) {
       return cb(err);

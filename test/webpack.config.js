@@ -18,16 +18,7 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader',
-            options: {
-              url: (url, resourcePath) => {
-                if (resourcePath.includes('myfont.font.js')) {
-                  return false;
-                }
-
-                return true;
-              }
-            }
+            loader: 'css-loader'
           },
           require.resolve('../') // Replace this line with require('webfonts-loader')
         ]
